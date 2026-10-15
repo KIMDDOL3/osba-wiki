@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "osba-wiki"
+version = "0.1.0"
+description = "Obsidian knowledge-vault automation: RSS ingestion, pgvector semantic search, GraphRAG visualization, and publishing pipelines"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "Apache-2.0" }
+authors = [{ name = "osba-wiki authors" }]
+keywords = ["obsidian", "pgvector", "rag", "graphrag", "rss", "knowledge-base"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Text Processing :: Markup :: Markdown",
+]
+
+dependencies = [
+    "psycopg[binary]>=3.1",
+    "pgvector>=0.2.5",
+]
+
+[project.optional-dependencies]
+graph = ["neo4j>=5.0"]
+whisper = ["faster-whisper"]
+all = ["neo4j>=5.0", "faster-whisper"]
+
+[tool.setuptools]
+packages = ["scripts", "scripts.notion-sync"]
+
+[tool.setuptools.package-dir]
+scripts = "scripts"
+"scripts.notion-sync" = "scripts/notion-sync"
+
+[tool.setuptools.package-data]
+"scripts.notion-sync" = ["run.sh", "README.md"]

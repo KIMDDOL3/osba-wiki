@@ -1,0 +1,33 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: osba-wiki-postgres
+    environment:
+      POSTGRES_USER: ${PGUSER:-wiki}
+      POSTGRES_PASSWORD: ${PGPASSWORD:-wiki}
+      POSTGRES_DB: ${PGDATABASE:-obsidian_rag}
+    ports:
+      - "${PGPORT:-5433}:5432"
+    volumes:
+      - pgvector_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${PGUSER:-wiki} -d ${PGDATABASE:-obsidian_rag}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  neo4j:
+    image: neo4j:5-community
+    container_name: osba-wiki-neo4j
+    environment:
+      NEO4J_AUTH: neo4j/${NEO4J_PASSWORD:-please-change-me}
+    ports:
+      - "7474:7474"
+      - "${NEO4J_PORT:-7687}:7687"
+    volumes:
+      - neo4j_data:/data
+    profiles: ["graph"]  # optional: docker compose --profile graph up
+
+volumes:
+  pgvector_data:
+  neo4j_data:
